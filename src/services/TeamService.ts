@@ -1,33 +1,33 @@
 // Models
 import { Team } from "../models/Team";
 
-// Types
-import { SelectType } from "../types/SelectType";
-
-const fetchTeams: () => Promise<SelectType[]> = async () => {
-  const teams = await Team.query().select('id', 'name');
-  return teams.map((team) => ({
-    value: team.id,
-    label: team.name,
-  }));
+const fetchTeams: () => Promise<Team[]> = async () => {
+  return await Team
+    .query()
+    .select('*')
+    .select(
+      Team.relatedQuery('users')
+        .count()
+        .as('users')
+    )
+    .orderBy('name');
 };
 
-const createTeam = () => {
-
-};
-
-const updateTeam = () => {
-
-};
-
-const deleteTeam = () => {
-
+const fetchTeamUsers: (id: string) => Promise<Team[]> = async (id) => {
+  return await Team
+    .query()
+    .select('*')
+    .where("id", id)
+    .withGraphFetched('[users]')
+    .modifyGraph('users', (builder) => {
+      builder
+        .select('id', 'name', 'email', 'joined_at')
+        .orderBy('name');
+    })
+    .orderBy('name');
 };
 
 export const TeamService = {
   fetchTeams,
-  createTeam,
-  updateTeam,
-  deleteTeam,
+  fetchTeamUsers,
 };
-

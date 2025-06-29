@@ -18,7 +18,7 @@ export class UserType extends Model {
 
   static override get relationMappings(): RelationMappings {
     return {
-      expenses: {
+      users: {
         relation: Model.HasManyRelation,
         modelClass: User,
         join: {
