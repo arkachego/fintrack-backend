@@ -1,42 +1,68 @@
 // Models
+import { Team } from "../models/Team";
 import { User } from "../models/User";
 import { UserType } from "../models/UserType";
 
-const fetchUsers: (type_id: string) => Promise<User[]> = async (type_id) => {
+// Enums
+import { USER_TYPE } from "../constants/user-types";
+
+// Types
+import { SessionType } from "../types/SessionType";
+
+const fetchApprovers: () => Promise<User[]> = async () => {
+  const approverType = await UserType
+    .query()
+    .select('id', 'name')
+    .where('name', USER_TYPE.ADMINISTRATOR);
   return await User
     .query()
     .select('id', 'name', 'email', 'joined_at')
-    .select(
-      User.relatedQuery('teams')
-        .count()
-        .as('teams')
-    )
-    .where("type_id", type_id)
+    .where('type_id', approverType[0].id)
     .orderBy('name');
 };
 
-const fetchUserTypes: () => Promise<UserType[]> = async () => {
-  return await UserType
+const fetchRequestors: (user: SessionType) => Promise<User[]> = async (user) => {
+  if (user.type === USER_TYPE.EMPLOYEE) {
+    return [];
+  }
+  const approverType = await UserType
     .query()
-    .select('*')
-    .orderBy('name');
-};
-
-const fetchUserTeams: (id: string) => Promise<UserType[]> = async (id) => {
+    .select('id', 'name')
+    .where('name', USER_TYPE.EMPLOYEE);
   return await User
     .query()
     .select('id', 'name', 'email', 'joined_at')
-    .where("id", id)
+    .where('type_id', approverType[0].id)
+    .orderBy('name');
+};
+
+const fetchTeams: (user: SessionType) => Promise<Team[]> = async (user) => {
+  if (user.type === USER_TYPE.ADMINISTRATOR) {
+    return await Team
+      .query()
+      .select('*')
+      .select(
+        Team.relatedQuery('users')
+          .count()
+          .as('users')
+      )
+      .orderBy('name');
+  }
+  const [{ teams }]= await User
+    .query()
+    .select('id')
+    .where("id", user.id)
     .withGraphFetched('[teams]')
     .modifyGraph('teams', (builder) => {
       builder
+        .select('id', 'name')
         .orderBy('name');
-    })
-    .orderBy('name');
+    });
+  return teams;
 };
 
 export const UserService = {
-  fetchUsers,
-  fetchUserTypes,
-  fetchUserTeams,
+  fetchApprovers,
+  fetchRequestors,
+  fetchTeams,
 };

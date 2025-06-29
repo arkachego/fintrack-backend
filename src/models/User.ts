@@ -14,6 +14,7 @@ export class User extends Model {
   type_id!: string;
   name!: string;
   email!: string;
+  password!: string;
   joined_at!: string;
 
   static override get tableName(): string {

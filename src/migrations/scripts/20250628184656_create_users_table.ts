@@ -23,6 +23,9 @@ export async function up(knex: Knex): Promise<void> {
       .notNullable()
       .unique();
     table
+      .string("password", 60)
+      .notNullable();
+    table
       .timestamp('joined_at', { useTz: true })
       .notNullable()
       .defaultTo(knex.fn.now());

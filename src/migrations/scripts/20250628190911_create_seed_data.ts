@@ -1,6 +1,8 @@
 // Libraries
 import DayJS from "dayjs";
 import type { Knex } from "knex";
+import bcrypt from "bcrypt";
+
 
 // Constants
 import { TABLE_NAME } from "../../constants/table-names";
@@ -37,6 +39,8 @@ export async function up(knex: Knex): Promise<void> {
   const employeeTypeId = userTypes.find(type => type.name === USER_TYPE.EMPLOYEE).id;
 
   const todayTimestamp = DayJS();
+  const passwordSalt = bcrypt.genSaltSync(10);
+  const dummyPassword = bcrypt.hashSync("SamplePassword1234#", passwordSalt);
 
   let admins = [
     { name: "Liam Bennett", email: "liam.bennett@arkahalder.com" },
@@ -47,10 +51,13 @@ export async function up(knex: Knex): Promise<void> {
   ].map(user => ({
     ...user,
     type_id: adminTypeId,
+    password: dummyPassword,
     joined_at: DayJS(todayTimestamp).subtract(5, "years").subtract(getRandomInt(30, 1), "days").subtract(getRandomInt(86400, 1), "seconds").toISOString(),
   }));
+
   const maxAdminJoinDate = DayJS(Math.max(...admins.map(admin => DayJS(admin.joined_at).valueOf())));
   const differenceDays = todayTimestamp.diff(maxAdminJoinDate, "days") - 10;
+  
   let employees = [
     { name: "James Howard", email: "james.howard@arkahalder.com" },
     { name: "Olivia Clark", email: "olivia.clark@arkahalder.com" },
@@ -90,6 +97,7 @@ export async function up(knex: Knex): Promise<void> {
   ].map(employee => ({
     ...employee,
     type_id: employeeTypeId,
+    password: dummyPassword,
     joined_at: DayJS(todayTimestamp).subtract(getRandomInt(differenceDays), "days").subtract(getRandomInt(86400, 1), "seconds").toISOString(),
   }));
   await knex(TABLE_NAME.USER).insert([
