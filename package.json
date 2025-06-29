@@ -1,0 +1,32 @@
+{
+  "name": "fintrack-backend",
+  "version": "1.0.0",
+  "description": "Express app serving the Back-End APIs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "db:migrate": "tsx --tsconfig src/migrations/tsconfig.knex.json node_modules/knex/bin/cli.js --knexfile src/migrations/knexfile.ts migrate:latest",
+    "db:script": "tsx --tsconfig src/migrations/tsconfig.knex.json node_modules/knex/bin/cli.js --knexfile src/migrations/knexfile.ts migrate:make",
+    "db:rollback": "tsx --tsconfig src/migrations/tsconfig.knex.json node_modules/knex/bin/cli.js --knexfile src/migrations/knexfile.ts migrate:rollback"
+  },
+  "author": "Arka Halder",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.13",
+    "express": "^5.1.0",
+    "knex": "^3.1.0",
+    "objection": "^3.1.5",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
