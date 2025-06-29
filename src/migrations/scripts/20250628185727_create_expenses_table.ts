@@ -11,6 +11,11 @@ export async function up(knex: Knex): Promise<void> {
       .primary()
       .defaultTo(knex.raw('gen_random_uuid()'));
     table
+      .uuid('team_id')
+      .notNullable()
+      .references('id')
+      .inTable(TABLE_NAME.TEAM);
+    table
       .uuid('requestor_id')
       .notNullable()
       .references('id')

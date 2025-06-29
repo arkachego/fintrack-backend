@@ -127,6 +127,7 @@ export async function up(knex: Knex): Promise<void> {
       user_id: employee.id,
     }));
   }).flat());
+  const userTeams = await knex(TABLE_NAME.USER_TEAM).select('*');
 
   await knex(TABLE_NAME.EXPENSE_TYPE).insert([
     "Transport",
@@ -152,13 +153,15 @@ export async function up(knex: Knex): Promise<void> {
   const approvedStatusId = expenseStatuses.find(status => status.name === EXPENSE_STATUS_TYPE.APPROVED).id;
   const rejectedStatusId = expenseStatuses.find(status => status.name === EXPENSE_STATUS_TYPE.REJECTED).id;
 
-  await knex(TABLE_NAME.EXPENSE).insert(employees.map(employee => {
+  const expenses = employees.map(employee => {
+    const employeeTeams = userTeams.filter(userTeam => userTeam.user_id === employee.id);
     let employeeExpenses = [];
     let expenseTimestamp = DayJS(employee.joined_at).add(getRandomInt(15), "days").add(getRandomInt(86400, 1), "seconds");
     while (expenseTimestamp.isBefore(todayTimestamp)) {
       const expenseType = expenseTypes[getRandomInt(expenseTypes.length)];
       const expenseStatusId = todayTimestamp.diff(expenseTimestamp, "days") < 30 ? pendingStatusId : getRandomInt(2) === 0 ? approvedStatusId : rejectedStatusId;
       const employeeExpense = {
+        team_id: employeeTeams[getRandomInt(employeeTeams.length)].team_id,
         requestor_id: employee.id,
         approver_id: admins[getRandomInt(admins.length)].id,
         type_id: expenseType.id,
@@ -177,7 +180,9 @@ export async function up(knex: Knex): Promise<void> {
       expenseTimestamp = DayJS(expenseTimestamp).add(getRandomInt(15), "days").add(getRandomInt(86400, 1), "seconds");
     }
     return employeeExpenses;
-  }).flat());
+  }).flat();
+
+  await knex(TABLE_NAME.EXPENSE).insert(expenses);
 };
 
 export async function down(knex: Knex): Promise<void> {};
