@@ -9,6 +9,9 @@ import { Expense } from './Expense';
 
 export class ExpenseType extends Model {
 
+  id!: string;
+  name!: string;
+  
   static override get tableName(): string {
     return TABLE_NAME.EXPENSE_TYPE;
   };

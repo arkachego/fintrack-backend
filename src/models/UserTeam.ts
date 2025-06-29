@@ -10,6 +10,9 @@ import { User } from './User';
 
 export class UserTeam extends Model {
 
+  team_id!: string;
+  user_id!: string;
+
   static override get tableName(): string {
     return TABLE_NAME.USER_TEAM;
   };

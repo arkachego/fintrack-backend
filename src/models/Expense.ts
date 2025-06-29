@@ -12,6 +12,19 @@ import { ExpenseStatus } from './ExpenseStatus';
 
 export class Expense extends Model {
 
+  id!: string;
+  team_id!: string;
+  requestor_id!: string;
+  approver_id!: string;
+  type_id!: string;
+  status_id!: string;
+  name!: string;
+  details!: string;
+  amount!: string;
+  requested_at!: string;
+  approved_at!: string;
+  rejected_at!: string;
+
   static override get tableName(): string {
     return TABLE_NAME.EXPENSE;
   };

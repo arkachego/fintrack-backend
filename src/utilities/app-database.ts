@@ -6,7 +6,7 @@ import Knex, { Knex as KnexType } from 'knex';
 import knexConfig from '../migrations/knexfile';
 
 // Initialize Knex
-const knex: KnexType = Knex(knexConfig);
+const knex: KnexType = Knex(knexConfig[process.env.NODE_ENV || 'development']);
 
 // Bind all Models to the knex instance
 Model.knex(knex);

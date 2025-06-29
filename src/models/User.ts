@@ -10,6 +10,12 @@ import { UserType } from './UserType';
 
 export class User extends Model {
 
+  id!: string;
+  type_id!: string;
+  name!: string;
+  email!: string;
+  joined_at!: string;
+
   static override get tableName(): string {
     return TABLE_NAME.USER;
   };
