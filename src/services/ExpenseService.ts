@@ -1,6 +1,10 @@
 // Models
+import { Expense } from "../models/Expense";
 import { ExpenseType } from "../models/ExpenseType";
 import { ExpenseStatus } from "../models/ExpenseStatus";
+
+// Types
+import { QueryType } from "../types/QueryType";
 
 const fetchExpenseTypes: () => Promise<ExpenseType[]> = async () => {
   return await ExpenseType
@@ -15,7 +19,23 @@ const fetchExpenseStatuses: () => Promise<ExpenseStatus[]> = async () => {
     .select('*');
 };
 
+const countExpenses: (query: QueryType) => Promise<Expense[]> = async (query) => {
+  console.log(query);
+  return await Expense
+    .query()
+    .select('*');
+};
+
+const searchExpenses: (query: QueryType) => Promise<Expense[]> = async (query) => {
+  console.log(query);
+  return await Expense
+    .query()
+    .select('*');
+};
+
 export const ExpenseService = {
   fetchExpenseTypes,
   fetchExpenseStatuses,
+  countExpenses,
+  searchExpenses,
 };

@@ -4,6 +4,9 @@ import { Router } from 'express';
 // Services
 import { ExpenseService } from '../../services/ExpenseService';
 
+// Types
+import { QueryType } from '../../types/QueryType';
+
 const expenseRouter = Router();
 
 expenseRouter.get('/types', async (req, res) => {
@@ -32,17 +35,36 @@ expenseRouter.get('/statuses', async (req, res) => {
   }
 });
 
-// userRouter.get('/list', async (req, res) => {
-//   try {
-//     const users = await UserService.searchUsers();
-//     res.status(200).send(users);
-//   }
-//   catch (error) {
-//     console.error(error);
-//     res.status(500).send({
-//       message: 'Error',
-//     });
-//   }
-// });
+// in-progress
+expenseRouter.post('/count', async (req, res) => {
+  try {
+    const expenses = await ExpenseService.countExpenses(
+      req.body as QueryType,
+    );
+    res.status(200).send(expenses);
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({
+      message: 'Error',
+    });
+  }
+});
+
+// in-progress
+expenseRouter.post('/search', async (req, res) => {
+  try {
+    const expenses = await ExpenseService.searchExpenses(
+      req.body as QueryType,
+    );
+    res.status(200).send(expenses);
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({
+      message: 'Error',
+    });
+  }
+});
 
 export { expenseRouter };

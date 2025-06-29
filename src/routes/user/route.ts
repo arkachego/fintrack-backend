@@ -6,7 +6,6 @@ import { UserService } from '../../services/UserService';
 
 const userRouter = Router();
 
-// complete
 userRouter.get('/types', async (req, res) => {
   try {
     const userTypes = await UserService.fetchUserTypes();
@@ -20,7 +19,6 @@ userRouter.get('/types', async (req, res) => {
   }
 });
 
-// complete
 userRouter.get('/list/:type_id', async (req, res) => {
   try {
     const users = await UserService.fetchUsers(req.params.type_id);
@@ -34,7 +32,6 @@ userRouter.get('/list/:type_id', async (req, res) => {
   }
 });
 
-// complete
 userRouter.get('/:id/teams', async (req, res) => {
   try {
     const users = await UserService.fetchUserTeams(req.params.id);
