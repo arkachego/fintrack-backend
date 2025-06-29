@@ -3,8 +3,8 @@ import { Operator } from "../enums/OperatorEnum";
 
 type ValueReferenceType = {
   field: string;
-  operator: Operator.EQUALS
-    | Operator.NOT_EQUALS
+  operator: Operator.EQUAL
+    | Operator.NOT_EQUAL
     | Operator.GREATER_THAN
     | Operator.GREATER_THAN_OR_EQUAL
     | Operator.LESS_THAN
@@ -21,14 +21,14 @@ type ArrayReferenceType = {
   reference: Array<string | number>;
 };
 
-type CriteriaType = ValueReferenceType | ArrayReferenceType;
-
-type SegmentType = {
+export type SegmentType = {
   page: number;
   item: number;
 };
 
+export type CriteriaType = ValueReferenceType | ArrayReferenceType;
+
 export type QueryType = {
-  criteria: CriteriaType[],
   segment?: SegmentType;
+  criteria: CriteriaType[],
 };

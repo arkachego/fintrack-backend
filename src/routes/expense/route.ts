@@ -35,13 +35,12 @@ expenseRouter.get('/statuses', async (req, res) => {
   }
 });
 
-// in-progress
 expenseRouter.post('/count', async (req, res) => {
   try {
     const expenses = await ExpenseService.countExpenses(
       req.body as QueryType,
     );
-    res.status(200).send(expenses);
+    res.status(200).send(expenses[0]);
   }
   catch (error) {
     console.error(error);
@@ -51,7 +50,6 @@ expenseRouter.post('/count', async (req, res) => {
   }
 });
 
-// in-progress
 expenseRouter.post('/search', async (req, res) => {
   try {
     const expenses = await ExpenseService.searchExpenses(
