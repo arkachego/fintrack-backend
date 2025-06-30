@@ -13,19 +13,32 @@ import { SessionType } from "../types/SessionType";
 
 const APP_TOKEN_SECRET = 'app-token-secret';
 
-const loginUser: (payload: LoginType) => Promise<string> = async (payload) => {
-  const user = await User
+type ObjectType = {
+  id: string;
+  name: string;
+};
+
+type LoginResponse = {
+  user: ObjectType;
+  type: ObjectType;
+  token: string;
+};
+
+const loginUser: (payload: LoginType) => Promise<LoginResponse> = async (payload) => {
+  const [ profile ] = await User
     .query()
-    .select('id', 'password')
+    .select('id', 'name', 'password')
     .where("email", payload.email)
     .withGraphFetched('[type]');
-  if (!user.length) {
+  if (!profile) {
     throw new Error("401");
   }
-  bcrypt.compareSync(payload.password, user[0].password);
-  return jsonwebtoken.sign({ id: user[0].id }, APP_TOKEN_SECRET, {
+  bcrypt.compareSync(payload.password, profile.password);
+  const token = jsonwebtoken.sign({ id: profile.id }, APP_TOKEN_SECRET, {
     expiresIn: '7d',
   });
+  const { type, password, ...user } = profile;
+  return { user, type, token };
 };
 
 const validateUser: (token: string) => Promise<SessionType> = async (token) => {

@@ -8,13 +8,13 @@ const authRouter = Router();
 
 authRouter.post('/login', async (req, res) => {
   try {
-    const token = await AuthService.loginUser(req.body);
+    const { user, type, token } = await AuthService.loginUser(req.body);
     res.cookie("x-auth-token", token, {
       domain: "localhost",
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    res.sendStatus(200);
+    res.status(200).send({ user, type });
   }
   catch (error) {
     console.error(error);
