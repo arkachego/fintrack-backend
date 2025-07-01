@@ -1,0 +1,32 @@
+name: Build and Push Docker Image to ECR
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    name: Automatic Deployment Engine for FinTrack Backend Server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Extract Image Tag
+        id: image_tag
+        run: echo "TAG=${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ secrets.AWS_ECR_REPO }}:${{ steps.image_tag.outputs.TAG }} .
+          docker tag ${{ secrets.AWS_ECR_REPO }}:${{ steps.image_tag.outputs.TAG }} \
+            ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:${{ steps.image_tag.outputs.TAG }}
+      - name: Push to Amazon ECR
+        run: |
+          docker push ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:${{ steps.image_tag.outputs.TAG }}
