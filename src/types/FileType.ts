@@ -1,4 +1,6 @@
 export type FileType = {
+  id: string;
   name: string;
-  type?: string;
+  type: string;
+  key: string;
 };

@@ -1,5 +1,9 @@
 // Libraries
+import DayJS from 'dayjs';
 import { QueryBuilder } from 'objection';
+
+// Constants
+import { EXPENSE_STATUS_TYPE } from '../constants/expense-status-types';
 
 // Models
 import { Expense } from "../models/Expense";
@@ -10,10 +14,13 @@ import { ExpenseStatus } from "../models/ExpenseStatus";
 import { Operator } from '../enums/OperatorEnum';
 
 // Types
+import { StatusType } from '../types/StatusType';
+import { ExpensePayloadType } from '../types/ExpensePayloadType';
 import { QueryType, SegmentType, CriteriaType } from "../types/QueryType";
 
 // Utilities
 import { Model, knex } from "../utilities/app-database";
+import { SessionType } from '../types/SessionType';
 
 const appendCriteria = <T extends Model>(
   query: QueryBuilder<T>,
@@ -91,9 +98,60 @@ const searchExpenses: (query: QueryType) => Promise<Expense[]> = async ({ segmen
   return await query;
 };
 
+// Linked with Route
+const createExpense: (user: SessionType, payload: ExpensePayloadType) => Promise<Expense> = async (user, payload) => {
+  const [ pendingStatus ] = await ExpenseStatus
+    .query()
+    .select('id', 'name')
+    .where('name', EXPENSE_STATUS_TYPE.PENDING);
+  const { id } = await Expense
+    .query()
+    .insertGraph({
+      ...payload,
+      status_id: pendingStatus.id,
+      requestor_id: user.id,
+      requested_at: DayJS().toISOString(),
+    } as any, { allowRefs: true });
+  const expense = await searchExpenses({
+    segment: {
+      page: 1,
+      item: 1,
+    },
+    criteria: [{
+      field: 'id',
+      operator: Operator.EQUAL,
+      reference: id,
+    }],
+  });
+  return expense[0];
+};
+
+// Linked with Route
+const changeStatus: (user: SessionType, payload: StatusType) => Promise<Expense> = async (user, payload) => {
+  const { id, status_id } = payload;
+  await Expense.query()
+    .updateAndFetchById(id, {
+      status_id,
+    });
+  const expense = await searchExpenses({
+    segment: {
+      page: 1,
+      item: 1,
+    },
+    criteria: [{
+      field: 'id',
+      operator: Operator.EQUAL,
+      reference: id,
+    }],
+  });
+  return expense[0];
+};
+
 export const ExpenseService = {
   fetchExpenseTypes,
   fetchExpenseStatuses,
   countExpenses,
   searchExpenses,
+  createExpense,
+  changeStatus,
 };

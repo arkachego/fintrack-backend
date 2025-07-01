@@ -2,13 +2,13 @@
 import DayJS from "dayjs";
 
 // Types
-import { FileType } from "../types/FileType";
+import { FilePayloadType } from "../types/FilePayloadType";
 
 // Utilities
 import { generateUploadUrl, generateDownloadUrl } from "../utilities/aws-s3-store";
 
 // Linked with Route
-const getUploadUrl: (payload: FileType) => Promise<string> = ({ name, type }) => {
+const getUploadUrl: (payload: FilePayloadType) => Promise<string> = ({ name, type }) => {
   return generateUploadUrl(`${DayJS().valueOf()}-${name}`, 60 * 5, type as string);
 };
 
