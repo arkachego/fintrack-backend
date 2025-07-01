@@ -104,14 +104,14 @@ export async function up(knex: Knex): Promise<void> {
     ...admins,
     ...employees,
   ]);
-  admins = await knex(TABLE_NAME.USER).select(
+  const adminObjs = await knex(TABLE_NAME.USER).select(
     'id',
     'name',
   ).where(
     'type_id',
     adminTypeId,
   );
-  employees = await knex(TABLE_NAME.USER).select(
+  const employeeObjs = await knex(TABLE_NAME.USER).select(
     'id',
     'name',
     'joined_at',
@@ -120,7 +120,7 @@ export async function up(knex: Knex): Promise<void> {
     employeeTypeId,
   );
 
-  await knex(TABLE_NAME.USER_TEAM).insert(employees.map(employee => {
+  await knex(TABLE_NAME.USER_TEAM).insert(employeeObjs.map(employee => {
     const teamsCount = getRandomInt(2, 1);
     const teamIds: string[] = [];
     while (teamIds.length < teamsCount) {
@@ -161,7 +161,7 @@ export async function up(knex: Knex): Promise<void> {
   const approvedStatusId = expenseStatuses.find(status => status.name === EXPENSE_STATUS_TYPE.APPROVED).id;
   const rejectedStatusId = expenseStatuses.find(status => status.name === EXPENSE_STATUS_TYPE.REJECTED).id;
 
-  const expenses = employees.map(employee => {
+  const expenses = employeeObjs.map(employee => {
     const employeeTeams = userTeams.filter(userTeam => userTeam.user_id === employee.id);
     let employeeExpenses = [];
     let expenseTimestamp = DayJS(employee.joined_at).add(getRandomInt(15), "days").add(getRandomInt(86400, 1), "seconds");
@@ -171,20 +171,16 @@ export async function up(knex: Knex): Promise<void> {
       const employeeExpense = {
         team_id: employeeTeams[getRandomInt(employeeTeams.length)].team_id,
         requestor_id: employee.id,
-        approver_id: admins[getRandomInt(admins.length)].id,
+        approver_id: adminObjs[getRandomInt(admins.length)].id,
         type_id: expenseType.id,
         status_id: expenseStatusId,
         name: `Expense for ${expenseType.name}`,
         amount: getRandomInt(10000, 500),
         spent_at: DayJS(expenseTimestamp).subtract(2, "days").toISOString(),
         requested_at: expenseTimestamp.toISOString(),
+        approved_at: (expenseStatusId === approvedStatusId) ? DayJS(expenseTimestamp.toISOString()).add(getRandomInt(3, 1), "days").add(getRandomInt(86400, 1), "seconds").toISOString() : null,
+        rejected_at: (expenseStatusId === rejectedStatusId) ? DayJS(expenseTimestamp.toISOString()).add(getRandomInt(3, 1), "days").add(getRandomInt(86400, 1), "seconds").toISOString() : null,
       };
-      if (employeeExpense.status_id === approvedStatusId) {
-        employeeExpense.approved_at = DayJS(employeeExpense.requested_at).add(getRandomInt(3, 1), "days").add(getRandomInt(86400, 1), "seconds").toISOString();
-      }
-      if (employeeExpense.status_id === rejectedStatusId) {
-        employeeExpense.rejected_at = DayJS(employeeExpense.requested_at).add(getRandomInt(3, 1), "days").add(getRandomInt(86400, 1), "seconds").toISOString();
-      }
       employeeExpenses.push(employeeExpense);
       expenseTimestamp = DayJS(expenseTimestamp).add(getRandomInt(15), "days").add(getRandomInt(86400, 1), "seconds");
     }
