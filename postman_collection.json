@@ -341,7 +341,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\n    \"groupBy\": \"type_id\",\n    \"criteria\": []\n}",
 							"options": {
 								"raw": {
 									"language": "json"
