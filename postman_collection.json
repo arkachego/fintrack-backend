@@ -7,40 +7,60 @@
 	},
 	"item": [
 		{
-			"name": "Teams",
+			"name": "Auth",
 			"item": [
 				{
-					"name": "fetch all teams",
+					"name": "login user",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"liam.bennett@arkahalder.com\",\n    \"password\": \"SamplePassword1234#\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{api_endpoint}}/team/list",
+							"raw": "{{api_endpoint}}/auth/login",
 							"host": [
 								"{{api_endpoint}}"
 							],
 							"path": [
-								"team",
-								"list"
+								"auth",
+								"login"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "fetch team users",
+					"name": "logout user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "GET",
+						"method": "HEAD",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"liam.bennett@arkahalder.com\",\n    \"password\": \"SamplePassword1234#\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{api_endpoint}}/team/b03eb568-e779-4340-8afb-494adc0edd08/users",
+							"raw": "{{api_endpoint}}/auth/logout",
 							"host": [
 								"{{api_endpoint}}"
 							],
 							"path": [
-								"team",
-								"b03eb568-e779-4340-8afb-494adc0edd08",
-								"users"
+								"auth",
+								"logout"
 							]
 						}
 					},
@@ -52,56 +72,110 @@
 			"name": "Users",
 			"item": [
 				{
-					"name": "fetch all user types",
+					"name": "fetch approvers",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{api_endpoint}}/user/types",
+							"raw": "{{api_endpoint}}/user/approvers",
 							"host": [
 								"{{api_endpoint}}"
 							],
 							"path": [
 								"user",
-								"types"
+								"approvers"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "fetch all users by type",
+					"name": "fetch requestors",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{api_endpoint}}/user/list/142c9561-e845-4813-8469-1382eaf6c605",
+							"raw": "{{api_endpoint}}/user/requestors",
 							"host": [
 								"{{api_endpoint}}"
 							],
 							"path": [
 								"user",
-								"list",
-								"142c9561-e845-4813-8469-1382eaf6c605"
+								"requestors"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "fetch user teams",
+					"name": "fetch teams",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{api_endpoint}}/user/bba13d8c-b2ea-497e-870d-bbac81666076/teams",
+							"raw": "{{api_endpoint}}/user/teams",
 							"host": [
 								"{{api_endpoint}}"
 							],
 							"path": [
 								"user",
-								"bba13d8c-b2ea-497e-870d-bbac81666076",
 								"teams"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "fetch upload url",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"sample-file.png\",\n    \"type\": \"image/png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_endpoint}}/file/upload",
+							"host": [
+								"{{api_endpoint}}"
+							],
+							"path": [
+								"file",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetch download url",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_endpoint}}/file/download?key=1751323388903-sample-file.png",
+							"host": [
+								"{{api_endpoint}}"
+							],
+							"path": [
+								"file",
+								"download"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "1751323388903-sample-file.png"
+								}
 							]
 						}
 					},
@@ -113,7 +187,7 @@
 			"name": "Expenses",
 			"item": [
 				{
-					"name": "fetch all expense types",
+					"name": "fetch types",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -131,7 +205,7 @@
 					"response": []
 				},
 				{
-					"name": "fetch all expense statuses",
+					"name": "fetch statuses",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -182,7 +256,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"segment\": {\n        \"page\": 1,\n        \"item\": 20\n    },\n    \"criteria\": [\n        {\n            \"field\": \"team_id\",\n            \"operator\": \"=\",\n            \"reference\": \"9d8b6dc9-7aca-4d4a-857f-8b6db46ae7d1\"\n        },\n        {\n            \"field\": \"requestor_id\",\n            \"operator\": \"=\",\n            \"reference\": \"1d032369-53a7-47bf-a38f-3e0bbd5ca2fe\"\n        },\n        {\n            \"field\": \"approver_id\",\n            \"operator\": \"=\",\n            \"reference\": \"aee1c0fa-06f9-4bed-9a0e-29ff8e5394f2\"\n        },\n        {\n            \"field\": \"type_id\",\n            \"operator\": \"=\",\n            \"reference\": \"3aab5561-58d7-4149-9fbc-3f090d59bb21\"\n        },\n        {\n            \"field\": \"status_id\",\n            \"operator\": \"=\",\n            \"reference\": \"acf74167-ec87-474f-a3b3-7f98c1b4098a\"\n        }\n    ]\n}",
+							"raw": "{\n    \"segment\": {\n        \"page\": 1,\n        \"item\": 20\n    },\n    \"criteria\": []\n}",
 							"options": {
 								"raw": {
 									"language": "json"

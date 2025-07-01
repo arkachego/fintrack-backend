@@ -45,6 +45,9 @@ export async function up(knex: Knex): Promise<void> {
       .decimal('amount', 10, 2)
       .notNullable();
     table
+      .timestamp('spent_at', { useTz: true })
+      .notNullable();
+    table
       .timestamp('requested_at', { useTz: true })
       .notNullable()
       .defaultTo(knex.fn.now());

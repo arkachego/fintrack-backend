@@ -9,6 +9,7 @@ import { Team } from './Team';
 import { User } from './User';
 import { ExpenseType } from './ExpenseType';
 import { ExpenseStatus } from './ExpenseStatus';
+import { ExpenseFile } from './ExpenseFile';
 
 export class Expense extends Model {
 
@@ -21,6 +22,7 @@ export class Expense extends Model {
   name!: string;
   details!: string;
   amount!: string;
+  spent_at!: string;
   requested_at!: string;
   approved_at!: string;
   rejected_at!: string;
@@ -69,6 +71,14 @@ export class Expense extends Model {
         join: {
           from: `${TABLE_NAME.EXPENSE}.status_id`,
           to: `${TABLE_NAME.EXPENSE_STATUS}.id`,
+        },
+      },
+      files: {
+        relation: Model.HasManyRelation,
+        modelClass: ExpenseFile,
+        join: {
+          from: `${TABLE_NAME.EXPENSE}.id`,
+          to: `${TABLE_NAME.EXPENSE_FILE}.expense_id`,
         },
       },
     };

@@ -24,6 +24,7 @@ type LoginResponse = {
   token: string;
 };
 
+// Linked with Route
 const loginUser: (payload: LoginType) => Promise<LoginResponse> = async (payload) => {
   const [ profile ] = await User
     .query()
@@ -41,6 +42,7 @@ const loginUser: (payload: LoginType) => Promise<LoginResponse> = async (payload
   return { user, type, token };
 };
 
+// Linked with Middleware
 const validateUser: (token: string) => Promise<SessionType> = async (token) => {
   const payload: any = jsonwebtoken.verify(token, APP_TOKEN_SECRET);
   const user = await User

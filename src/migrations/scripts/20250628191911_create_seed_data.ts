@@ -176,6 +176,7 @@ export async function up(knex: Knex): Promise<void> {
         status_id: expenseStatusId,
         name: `Expense for ${expenseType.name}`,
         amount: getRandomInt(10000, 500),
+        spent_at: DayJS(expenseTimestamp).subtract(2, "days").toISOString(),
         requested_at: expenseTimestamp.toISOString(),
       };
       if (employeeExpense.status_id === approvedStatusId) {

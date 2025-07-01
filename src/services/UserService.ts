@@ -9,6 +9,7 @@ import { USER_TYPE } from "../constants/user-types";
 // Types
 import { SessionType } from "../types/SessionType";
 
+// Linked with Route
 const fetchApprovers: () => Promise<User[]> = async () => {
   const approverType = await UserType
     .query()
@@ -21,6 +22,7 @@ const fetchApprovers: () => Promise<User[]> = async () => {
     .orderBy('name');
 };
 
+// Linked with Route
 const fetchRequestors: (user: SessionType) => Promise<User[]> = async (user) => {
   if (user.type === USER_TYPE.EMPLOYEE) {
     return [];
@@ -36,6 +38,7 @@ const fetchRequestors: (user: SessionType) => Promise<User[]> = async (user) => 
     .orderBy('name');
 };
 
+// Linked with Route
 const fetchTeams: (user: SessionType) => Promise<Team[]> = async (user) => {
   if (user.type === USER_TYPE.ADMINISTRATOR) {
     return await Team

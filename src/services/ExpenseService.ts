@@ -32,6 +32,7 @@ const appendCriteria = <T extends Model>(
   }
 };
 
+// Linked with Route
 const fetchExpenseTypes: () => Promise<ExpenseType[]> = async () => {
   return await ExpenseType
     .query()
@@ -39,12 +40,14 @@ const fetchExpenseTypes: () => Promise<ExpenseType[]> = async () => {
     .orderBy('name');
 };
 
+// Linked with Route
 const fetchExpenseStatuses: () => Promise<ExpenseStatus[]> = async () => {
   return await ExpenseStatus
     .query()
     .select('*');
 };
 
+// Linked with Route
 const countExpenses: (query: QueryType) => Promise<Expense[]> = async ({ criteria }) => {
   const query = Expense
     .query()
@@ -53,6 +56,7 @@ const countExpenses: (query: QueryType) => Promise<Expense[]> = async ({ criteri
   return await query;
 };
 
+// Linked with Route
 const searchExpenses: (query: QueryType) => Promise<Expense[]> = async ({ segment, criteria }) => {
   const query = Expense
     .query()
@@ -61,6 +65,7 @@ const searchExpenses: (query: QueryType) => Promise<Expense[]> = async ({ segmen
       'name',
       'details',
       'amount',
+      'spent_at',
       'requested_at',
       'approved_at',
       'rejected_at',
@@ -71,7 +76,7 @@ const searchExpenses: (query: QueryType) => Promise<Expense[]> = async ({ segmen
     item: 20,
   };
   query
-    .withGraphFetched('[team,requestor,approver,type,status]')
+    .withGraphFetched('[team,requestor,approver,type,status,files]')
     .modifyGraph('requestor', (builder) => {
       builder
         .select('id', 'name');
