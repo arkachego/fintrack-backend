@@ -1,9 +1,15 @@
 // Libraries
 import { Model, RelationMappings } from 'objection';
-import Knex, { Knex as KnexType } from 'knex';
+import Knex, { Knex as KnexType, QueryBuilder } from 'knex';
 
 // Utilities
 import knexConfig from '../migrations/knexfile';
+
+// Enums
+import { Operator } from '../enums/OperatorEnum';
+
+// Types
+import { CriteriaType } from '../types/QueryType';
 
 // Initialize Knex
 const knex: KnexType = Knex(knexConfig[process.env.NODE_ENV || 'development']);
@@ -11,5 +17,22 @@ const knex: KnexType = Knex(knexConfig[process.env.NODE_ENV || 'development']);
 // Bind all Models to the knex instance
 Model.knex(knex);
 
+const appendCriteria = <T extends Model>(
+  query: QueryBuilder<T>,
+  criteria: CriteriaType[]
+): void => {
+  if (!criteria || criteria.length === 0) return;
+  for (let i = 0; i < criteria.length; i++) {
+    const clause = i === 0 ? 'where' : 'andWhere';
+    const { field, operator, reference } = criteria[i];
+    if (operator === Operator.IN || operator === Operator.NOT_IN) {
+      const arrayOperator = operator === Operator.NOT_IN ? 'NOT IN' : 'IN';
+      query[clause](knex.raw(`?? ${arrayOperator} (?)`, [field, reference]));
+    } else {
+      query[clause](knex.raw(`?? ${operator} ?`, [field, reference]));
+    }
+  }
+};
+
 // Export
-export { Model, RelationMappings, knex };
+export { Model, RelationMappings, knex, appendCriteria };
