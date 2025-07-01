@@ -21,6 +21,7 @@ import { QueryType, SegmentType, CriteriaType } from "../types/QueryType";
 // Utilities
 import { Model, knex } from "../utilities/app-database";
 import { SessionType } from '../types/SessionType';
+import e from 'express';
 
 const appendCriteria = <T extends Model>(
   query: QueryBuilder<T>,
@@ -129,10 +130,19 @@ const createExpense: (user: SessionType, payload: ExpensePayloadType) => Promise
 // Linked with Route
 const changeStatus: (user: SessionType, payload: StatusType) => Promise<Expense> = async (user, payload) => {
   const { id, status_id } = payload;
+  const status = await ExpenseStatus.query()
+    .findById(status_id);
+  const delta = {
+    status_id,
+  };
+  if (status?.name === EXPENSE_STATUS_TYPE.APPROVED) {
+    delta.approved_at = DayJS().toISOString();
+  }
+  else {
+    delta.rejected_at = DayJS().toISOString();
+  }
   await Expense.query()
-    .updateAndFetchById(id, {
-      status_id,
-    });
+    .updateAndFetchById(id, delta);
   const expense = await searchExpenses({
     segment: {
       page: 1,

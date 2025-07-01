@@ -275,6 +275,90 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "create expense",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Arka Expense Test 1\",\n    \"details\": null,\n    \"type_id\": \"ce249a0a-4872-4c44-89bd-c5c5994b670c\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_endpoint}}/expense",
+							"host": [
+								"{{api_endpoint}}"
+							],
+							"path": [
+								"expense"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"f28c1a94-06ed-404d-a6e7-e38d86af939e\",\n    \"status_id\": \"ad41b3fe-3f44-44d8-9d3e-145b89544c0b\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_endpoint}}/expense/status",
+							"host": [
+								"{{api_endpoint}}"
+							],
+							"path": [
+								"expense",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analytics",
+			"item": [
+				{
+					"name": "fetch analytics",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_endpoint}}/analytics",
+							"host": [
+								"{{api_endpoint}}"
+							],
+							"path": [
+								"analytics"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

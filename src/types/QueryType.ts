@@ -29,6 +29,7 @@ export type SegmentType = {
 export type CriteriaType = ValueReferenceType | ArrayReferenceType;
 
 export type QueryType = {
+  groupBy?: string;
   segment?: SegmentType;
   criteria: CriteriaType[],
 };
