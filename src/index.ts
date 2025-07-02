@@ -11,12 +11,14 @@ const port = 3000;
 
 app.use(express.json());
 app.use(cookieParser());
+
+const corsOrigin = process.env.NODE_ENV === 'production' ? `https://${process.env.AUTHORIZED_DOMAIN}` : `http://${process.env.AUTHORIZED_DOMAIN}:5173`;
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? process.env.VITE_CLIENT_APP_URL : 'http://localhost:5173',
+  origin: corsOrigin,
   credentials: true,
 }));
 app.use("/", routes);
 
 app.listen(port, () => {
-  console.log(`Backend server is running on http://localhost:${port}`);
+  console.log(`Backend server is running on ${corsOrigin}`);
 });

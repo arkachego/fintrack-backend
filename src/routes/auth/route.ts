@@ -10,7 +10,7 @@ authRouter.post('/login', async (req, res) => {
   try {
     const { user, type, token } = await AuthService.loginUser(req.body);
     res.cookie("x-auth-token", token, {
-      domain: "localhost",
+      domain: process.env.AUTHORIZED_DOMAIN,
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
