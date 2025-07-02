@@ -113,7 +113,7 @@ const changeStatus: (user: SessionType, payload: StatusType) => Promise<Expense>
   const { id, status_id } = payload;
   const status = await ExpenseStatus.query()
     .findById(status_id);
-  const delta = {
+  const delta: Partial<Expense> = {
     status_id,
   };
   if (status?.name === EXPENSE_STATUS_TYPE.APPROVED) {
