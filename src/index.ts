@@ -12,7 +12,7 @@ const port = 3000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.NODE_ENV === 'production' ? process.env.VITE_CLIENT_APP_URL : 'http://localhost:5173',
   credentials: true,
 }));
 app.use("/", routes);
