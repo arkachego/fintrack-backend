@@ -38,6 +38,7 @@ const searchExpenses: (query: QueryType) => Promise<Expense[]> = async ({ segmen
       'name',
       'details',
       'amount',
+      'attachment',
       'spent_at',
       'requested_at',
       'approved_at',
@@ -49,7 +50,7 @@ const searchExpenses: (query: QueryType) => Promise<Expense[]> = async ({ segmen
     item: 20,
   };
   query
-    .withGraphFetched('[team,requestor,approver,type,status,files]')
+    .withGraphFetched('[team,requestor,approver,type,status]')
     .modifyGraph('requestor', (builder) => {
       builder
         .select('id', 'name');

@@ -6,5 +6,4 @@ export const TABLE_NAME = {
   EXPENSE: "expenses",
   EXPENSE_TYPE: "expense_types",
   EXPENSE_STATUS: "expense_statuses",
-  EXPENSE_FILE: "expense_files",
 };
