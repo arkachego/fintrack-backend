@@ -10,21 +10,24 @@ const getScriptsPath = () => {
   return pathParts.join(path.sep);
 };
 
-const config: { [key: string]: Knex.Config } = {
-  development: {
-    client: 'pg',
-    connection: {
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT || "5432"),
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-    },
-    migrations: {
-      directory: getScriptsPath(),
-      extension: 'ts',
-    },
+const KNEX_CONFIG = {
+  client: 'pg',
+  connection: {
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || "5432"),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
   },
+  migrations: {
+    directory: getScriptsPath(),
+    extension: 'ts',
+  },
+};
+
+const config: { [key: string]: Knex.Config } = {
+  production: KNEX_CONFIG,
+  development: KNEX_CONFIG,
 };
 
 export default config;
