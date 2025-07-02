@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   deploy:
-    name: Automatic Deployment Engine for FinTrack Backend Server
+    name: Automatic Deployer
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code
