@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   deploy:
-    name: Automatic Deployer
+    name: Automatic Deployment
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code
