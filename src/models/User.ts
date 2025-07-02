@@ -47,3 +47,14 @@ export class User extends Model {
   };
 
 };
+
+export interface UserWithRelations extends User {
+  type: {
+    id: string;
+    name: string;
+  };
+  teams: {
+    id: string;
+    name: string;
+  }[];
+}

@@ -1,6 +1,7 @@
 // Libraries
 import { Model, RelationMappings } from 'objection';
-import Knex, { Knex as KnexType, QueryBuilder } from 'knex';
+import Knex from 'knex';
+import type { Knex as KnexType } from 'knex';
 
 // Utilities
 import knexConfig from '../migrations/knexfile';
@@ -14,11 +15,11 @@ import { CriteriaType } from '../types/QueryType';
 // Initialize Knex
 const knex: KnexType = Knex(knexConfig[process.env.NODE_ENV || 'development']);
 
-// Bind all Models to the knex instance
+// Bind Objection to Knex
 Model.knex(knex);
 
-const appendCriteria = <T extends Model>(
-  query: QueryBuilder<T>,
+const appendCriteria = (
+  query: Knex.QueryBuilder,
   criteria: CriteriaType[]
 ): void => {
   if (!criteria || criteria.length === 0) return;

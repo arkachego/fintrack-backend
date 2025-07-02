@@ -4,8 +4,7 @@ import jsonwebtoken from "jsonwebtoken";
 import HttpError from "http-errors";
 
 // Models
-import { User } from "../models/User";
-import { UserType } from "../models/UserType";
+import { User, UserWithRelations } from "../models/User";
 
 // Types
 import { LoginType } from "../types/LoginType";
@@ -30,7 +29,7 @@ const loginUser: (payload: LoginType) => Promise<LoginResponse> = async (payload
     .query()
     .select('id', 'name', 'password')
     .where("email", payload.email)
-    .withGraphFetched('[type]');
+    .withGraphFetched('[type]') as unknown as UserWithRelations[];
   if (!profile) {
     throw new Error("401");
   }
@@ -53,7 +52,7 @@ const validateUser: (token: string) => Promise<SessionType> = async (token) => {
     .modifyGraph('type', (builder) => {
       builder
         .select('id', 'name');
-    });
+    }) as unknown as UserWithRelations[];
   if (!user.length) {
     throw HttpError(403);
   }
