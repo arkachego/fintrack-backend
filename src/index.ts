@@ -12,10 +12,14 @@ const port = 3000;
 app.use(express.json());
 app.use(cookieParser());
 
-const corsOrigin = process.env.NODE_ENV === 'production' ? `https://${process.env.AUTHORIZED_DOMAIN}` : `http://${process.env.AUTHORIZED_DOMAIN}:5173`;
+const corsOrigin = process.env.NODE_ENV === 'production'
+  ? `https://${process.env.AUTHORIZED_SUBDOMAIN}.${process.env.AUTHORIZED_DOMAIN}`
+  : `http://${process.env.AUTHORIZED_DOMAIN}:5173`;
+
 app.use(cors({
   origin: corsOrigin,
   credentials: true,
+  methods: [ 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS' ],
 }));
 app.use("/", routes);
 
