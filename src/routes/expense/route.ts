@@ -99,4 +99,20 @@ expenseRouter.patch('/status', async (req, res) => {
   }
 });
 
+expenseRouter.post('/analytics', async (req, res) => {
+  try {
+    const analytics = await ExpenseService.getAnalyticsData(
+      res.locals.user,
+      req.body as QueryType,
+    );
+    res.status(200).send(analytics);
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send({
+      message: 'Error',
+    });
+  }
+});
+
 export { expenseRouter };

@@ -16,7 +16,7 @@ import { Operator } from '../enums/OperatorEnum';
 import { StatusType } from '../types/StatusType';
 import { SessionType } from '../types/SessionType';
 import { ExpensePayloadType } from '../types/ExpensePayloadType';
-import { QueryType, SegmentType } from "../types/QueryType";
+import { CriteriaType, QueryType, SegmentType } from "../types/QueryType";
 
 // Utilities
 import { appendCriteria } from "../utilities/app-database";
@@ -138,6 +138,47 @@ const changeStatus: (user: SessionType, payload: StatusType) => Promise<Expense>
   return expense[0];
 };
 
+// Linked with Route
+const getAnalyticsData: (user: SessionType, query: QueryType) => Promise<any[]> = async (user, query) => {
+  const { criteria, granularity } = query;
+  const granularityMap = {
+    daily: `TO_CHAR(approved_at, 'YYYY-MM-DD')`,
+    monthly: `TO_CHAR(approved_at, 'YYYY-MM')`,
+    yearly: `TO_CHAR(approved_at, 'YYYY')`,
+  };
+  const groupExpr = granularityMap[granularity];
+  const groupAlias = `${granularity}_id`;
+  const [ approvedStatus ] = await ExpenseStatus
+    .query()
+    .select('id', 'name')
+    .where('name', EXPENSE_STATUS_TYPE.APPROVED);
+  const subquery = Expense
+    .query()
+    .select(
+      Expense.raw(`${groupExpr} AS ${groupAlias}`),
+      'amount'
+    );
+  const modifiedCriteria: CriteriaType[] = [
+    ...criteria,
+    {
+      field: 'status_id',
+      operator: Operator.EQUAL,
+      reference: approvedStatus.id,
+    },
+  ];
+  appendCriteria(subquery, modifiedCriteria);
+  const result = await Expense
+    .query()
+    .from(subquery)
+    .select(
+      groupAlias,
+      Expense.raw('SUM(amount)::float AS total_amount')
+    )
+    .groupBy(groupAlias)
+    .orderBy(groupAlias, 'ASC');
+  return result;
+};
+
 export const ExpenseService = {
   fetchExpenseTypes,
   fetchExpenseStatuses,
@@ -145,4 +186,5 @@ export const ExpenseService = {
   searchExpenses,
   createExpense,
   changeStatus,
+  getAnalyticsData,
 };

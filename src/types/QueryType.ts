@@ -21,6 +21,8 @@ type ArrayReferenceType = {
   reference: Array<string | number>;
 };
 
+export type GranularityType = 'daily' | 'monthly' | 'yearly';
+
 export type SegmentType = {
   page: number;
   item: number;
@@ -29,7 +31,7 @@ export type SegmentType = {
 export type CriteriaType = ValueReferenceType | ArrayReferenceType;
 
 export type QueryType = {
-  groupBy?: string;
-  segment?: SegmentType;
   criteria: CriteriaType[],
+  segment?: SegmentType;
+  granularity?: GranularityType;
 };

@@ -8,9 +8,8 @@ import { validatorRouter } from '../middlewares/validate';
 import { healthRouter } from './health/route';
 import { authRouter } from './auth/route';
 import { userRouter } from './user/route';
-import { expenseRouter } from './expense/route';
 import { fileRouter } from './file/route';
-import { analyticsRouter } from './analytics/route';
+import { expenseRouter } from './expense/route';
 
 const router = Router();
 
@@ -20,6 +19,5 @@ router.use(validatorRouter);
 router.use('/user', userRouter);
 router.use('/file', fileRouter);
 router.use('/expense', expenseRouter);
-router.use('/analytics', analyticsRouter);
 
 export default router;
