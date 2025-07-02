@@ -3,6 +3,9 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
+// Types
+import { FilePayloadType } from "../types/FilePayloadType";
+
 const BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME!;
 
 const s3Client = new S3Client({
@@ -17,13 +20,18 @@ export const generateUploadUrl = async (
   key: string,
   expiresInSeconds: number,
   contentType: string,
-): Promise<string> => {
+): Promise<FilePayloadType> => {
   const command = new PutObjectCommand({
     Bucket: BUCKET_NAME,
     Key: key,
     ContentType: contentType,
   });
-  return getSignedUrl(s3Client, command, { expiresIn: expiresInSeconds });
+  const url = await getSignedUrl(s3Client, command, { expiresIn: expiresInSeconds });
+  return {
+    name: key,
+    type: contentType,
+    url: url,
+  };
 };
 
 export const generateDownloadUrl = async (

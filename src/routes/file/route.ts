@@ -9,8 +9,8 @@ const fileRouter = Router();
 fileRouter.post('/upload', async (req, res) => {
   try {
     const payload = req.body;
-    const url = await FileService.getUploadUrl(payload);
-    res.status(200).send({ url });
+    const result = await FileService.getUploadUrl(payload);
+    res.status(200).send(result);
   }
   catch (error) {
     console.error(error);

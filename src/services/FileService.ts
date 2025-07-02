@@ -8,7 +8,7 @@ import { FilePayloadType } from "../types/FilePayloadType";
 import { generateUploadUrl, generateDownloadUrl } from "../utilities/aws-s3-store";
 
 // Linked with Route
-const getUploadUrl: (payload: FilePayloadType) => Promise<string> = ({ name, type }) => {
+const getUploadUrl: (payload: FilePayloadType) => Promise<FilePayloadType> = ({ name, type }) => {
   return generateUploadUrl(`${DayJS().valueOf()}-${name}`, 60 * 5, type as string);
 };
 
