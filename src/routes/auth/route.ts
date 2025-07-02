@@ -12,6 +12,7 @@ authRouter.post('/login', async (req, res) => {
     res.cookie("x-auth-token", token, {
       domain: process.env.AUTHORIZED_DOMAIN,
       httpOnly: true,
+      secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(200).send({ user, type });
@@ -27,7 +28,7 @@ authRouter.post('/login', async (req, res) => {
 authRouter.head('/logout', async (req, res) => {
   try {
     res.clearCookie("x-auth-token", {
-      domain: "localhost",
+      domain: process.env.AUTHORIZED_DOMAIN,
       httpOnly: true,
       path: '/',
     });
