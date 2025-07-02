@@ -22,11 +22,14 @@ jobs:
       - name: Extract Image Tag
         id: image_tag
         run: echo "TAG=${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
-      - name: Build Docker Image
+      - name: Build and Tag Docker Image
         run: |
           docker build -t ${{ secrets.AWS_ECR_REPO }}:${{ steps.image_tag.outputs.TAG }} .
           docker tag ${{ secrets.AWS_ECR_REPO }}:${{ steps.image_tag.outputs.TAG }} \
             ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:${{ steps.image_tag.outputs.TAG }}
-      - name: Push to Amazon ECR
+          docker tag ${{ secrets.AWS_ECR_REPO }}:${{ steps.image_tag.outputs.TAG }} \
+            ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:latest
+      - name: Push Docker Images to Amazon ECR
         run: |
           docker push ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:${{ steps.image_tag.outputs.TAG }}
+          docker push ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:latest
