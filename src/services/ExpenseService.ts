@@ -6,7 +6,6 @@ import { EXPENSE_STATUS_TYPE } from '../constants/expense-status-types';
 
 // Models
 import { Expense } from "../models/Expense";
-import { ExpenseType } from "../models/ExpenseType";
 import { ExpenseStatus } from "../models/ExpenseStatus";
 
 // Enums
@@ -20,21 +19,6 @@ import { CriteriaType, QueryType, SegmentType } from "../types/QueryType";
 
 // Utilities
 import { appendCriteria } from "../utilities/app-database";
-
-// Linked with Route
-const fetchExpenseTypes: () => Promise<ExpenseType[]> = async () => {
-  return await ExpenseType
-    .query()
-    .select('*')
-    .orderBy('name');
-};
-
-// Linked with Route
-const fetchExpenseStatuses: () => Promise<ExpenseStatus[]> = async () => {
-  return await ExpenseStatus
-    .query()
-    .select('*');
-};
 
 // Linked with Route
 const countExpenses: (query: QueryType) => Promise<Expense[]> = async ({ criteria }) => {
@@ -180,8 +164,6 @@ const getAnalyticsData: (user: SessionType, query: QueryType) => Promise<any[]> 
 };
 
 export const ExpenseService = {
-  fetchExpenseTypes,
-  fetchExpenseStatuses,
   countExpenses,
   searchExpenses,
   createExpense,

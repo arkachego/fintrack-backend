@@ -2,70 +2,91 @@
 import { Team } from "../models/Team";
 import { User, UserWithRelations } from "../models/User";
 import { UserType } from "../models/UserType";
+import { ExpenseType } from "../models/ExpenseType";
+import { ExpenseStatus } from "../models/ExpenseStatus";
 
 // Enums
 import { USER_TYPE } from "../constants/user-types";
 
 // Types
 import { SessionType } from "../types/SessionType";
+import { ModelObjectType } from "../types/ModelObjectType";
+
+const getOptionMaps = (options: ModelObjectType[]) => {
+  return options.map((option: any) => ({
+    label: option.name,
+    value: option.id,
+  }));
+};
 
 // Linked with Route
-const fetchApprovers: () => Promise<User[]> = async () => {
-  const approverType = await UserType
+const fetchProfile: (user: SessionType) => Promise<any> = async (user) => {
+  const [ profile ] = await User
+    .query()
+    .select('id', 'name')
+    .where("id", user.id)
+    .withGraphFetched('[type]') as unknown as UserWithRelations[];
+  const { type: role, ...rest } = profile;
+  const types = await ExpenseType
+    .query()
+    .select('id', 'name')
+    .orderBy('name', 'ASC');
+  const statuses = await ExpenseStatus
+    .query()
+    .select('*');
+  const adminRole = await UserType
     .query()
     .select('id', 'name')
     .where('name', USER_TYPE.ADMINISTRATOR);
-  return await User
+  const approvers = await User
     .query()
-    .select('id', 'name', 'email', 'joined_at')
-    .where('type_id', approverType[0].id)
-    .orderBy('name');
-};
-
-// Linked with Route
-const fetchRequestors: (user: SessionType) => Promise<User[]> = async (user) => {
-  if (user.type === USER_TYPE.EMPLOYEE) {
-    return [];
-  }
-  const approverType = await UserType
+    .select('id', 'name')
+    .where('type_id', adminRole[0].id)
+    .orderBy('name', 'ASC');
+  const employeeRole = await UserType
     .query()
     .select('id', 'name')
     .where('name', USER_TYPE.EMPLOYEE);
-  return await User
+  const requestors = await User
     .query()
-    .select('id', 'name', 'email', 'joined_at')
-    .where('type_id', approverType[0].id)
-    .orderBy('name');
-};
-
-// Linked with Route
-const fetchTeams: (user: SessionType) => Promise<{ id: string; name: string; }[]> = async (user) => {
+    .select('id', 'name')
+    .where('type_id', employeeRole[0].id)
+    .orderBy('name', 'ASC');
+  let teams = [];
   if (user.type === USER_TYPE.ADMINISTRATOR) {
-    return await Team
+    teams = await Team
       .query()
-      .select('*')
-      .select(
-        Team.relatedQuery('users')
-          .count()
-          .as('users')
-      )
+      .select('id', 'name')
       .orderBy('name');
   }
-  const [{ teams }]= await User
-    .query()
-    .select('id')
-    .where("id", user.id)
-    .withGraphFetched('[teams]')
-    .modifyGraph('teams', (builder) => {
-      builder
-        .select('id', 'name')
-        .orderBy('name');
-    }) as unknown as UserWithRelations[];
-  return teams;
+  else {
+    const result = await User
+      .query()
+      .select('id')
+      .where("id", user.id)
+      .withGraphFetched('[teams]')
+      .modifyGraph('teams', (builder) => {
+        builder
+          .select('id', 'name')
+          .orderBy('name');
+      }) as unknown as UserWithRelations[];
+    teams = result[0].teams;
+  }
+  return {
+    profile: {
+      user: rest,
+      role,
+    },
+    options: {
+      types: getOptionMaps(types),
+      statuses: getOptionMaps(statuses),
+      approvers: getOptionMaps(approvers),
+      requestors: getOptionMaps(requestors),
+      teams: getOptionMaps(teams),
+    },
+  };
 };
 
 export const UserService = {
-  fetchApprovers,
-  fetchRequestors,
-  fetchTeams,
+  fetchProfile,
 };

@@ -1,362 +1,305 @@
 {
 	"info": {
-		"_postman_id": "aae0d1e0-10c6-4b85-a0fb-117fc05a03bd",
-		"name": "FinTrack",
+		"_postman_id": "a4d19b24-f5a2-45fd-9f9e-8553f75b863c",
+		"name": "Arka's Portfolio",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29644413"
 	},
 	"item": [
 		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "login user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"liam.bennett@arkahalder.com\",\n    \"password\": \"SamplePassword1234#\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api_endpoint}}/auth/login",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"auth",
-								"login"
-							]
+			"name": "Access Register API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"companyName\": null,\n    \"userName\": \"Test User\",\n    \"userEmail\": \"test.email.1@arkahalder.com\",\n    \"countryCode\": \"+91\",\n    \"cellNumber\": \"9830198301\",\n    \"timeOffset\": 330,\n    \"passwordKey\": \"#TestUser1234\",\n    \"captchaKey\": \"captcha-key\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					},
-					"response": []
+					}
 				},
-				{
-					"name": "logout user",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "HEAD",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"liam.bennett@arkahalder.com\",\n    \"password\": \"SamplePassword1234#\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api_endpoint}}/auth/logout",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"auth",
-								"logout"
-							]
-						}
-					},
-					"response": []
+				"url": {
+					"raw": "{{url}}/access/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"access",
+						"register"
+					]
 				}
-			]
+			},
+			"response": []
 		},
 		{
-			"name": "Users",
-			"item": [
-				{
-					"name": "fetch approvers",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api_endpoint}}/user/approvers",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"user",
-								"approvers"
-							]
+			"name": "Access Reset API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userEmail\": \"test.email.1@arkahalder.com\",\n    \"captchaKey\": \"captcha-key\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					},
-					"response": []
+					}
 				},
-				{
-					"name": "fetch requestors",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api_endpoint}}/user/requestors",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"user",
-								"requestors"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "fetch teams",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api_endpoint}}/user/teams",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"user",
-								"teams"
-							]
-						}
-					},
-					"response": []
+				"url": {
+					"raw": "{{url}}/access/reset",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"access",
+						"reset"
+					]
 				}
-			]
+			},
+			"response": []
 		},
 		{
-			"name": "Files",
-			"item": [
-				{
-					"name": "fetch upload url",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"sample-file.png\",\n    \"type\": \"image/png\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api_endpoint}}/file/upload",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"file",
-								"upload"
-							]
+			"name": "Access Sign-In API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userEmail\": \"admin@arkahalder.com\",\n    \"passwordKey\": \"Admin123\",\n    \"captchaKey\": \"captcha-key\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					},
-					"response": []
+					}
 				},
-				{
-					"name": "fetch download url",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api_endpoint}}/file/download?key=1751323388903-sample-file.png",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"file",
-								"download"
-							],
-							"query": [
-								{
-									"key": "key",
-									"value": "1751323388903-sample-file.png"
-								}
-							]
-						}
-					},
-					"response": []
+				"url": {
+					"raw": "{{url}}/access/sign-in",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"access",
+						"sign-in"
+					]
 				}
-			]
+			},
+			"response": []
 		},
 		{
-			"name": "Expenses",
-			"item": [
-				{
-					"name": "fetch types",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api_endpoint}}/expense/types",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"expense",
-								"types"
-							]
+			"name": "Access Sign-Out API",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "HEAD",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userEmail\": \"test.email.1@arkahalder.com\",\n    \"passwordKey\": \"#TestUser1234\",\n    \"captchaKey\": \"captcha-key\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					},
-					"response": []
+					}
 				},
-				{
-					"name": "fetch statuses",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api_endpoint}}/expense/statuses",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"expense",
-								"statuses"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "count expenses",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"criteria\": [\n        {\n            \"field\": \"team_id\",\n            \"operator\": \"=\",\n            \"reference\": \"9d8b6dc9-7aca-4d4a-857f-8b6db46ae7d1\"\n        },\n        {\n            \"field\": \"requestor_id\",\n            \"operator\": \"=\",\n            \"reference\": \"1d032369-53a7-47bf-a38f-3e0bbd5ca2fe\"\n        },\n        {\n            \"field\": \"approver_id\",\n            \"operator\": \"=\",\n            \"reference\": \"aee1c0fa-06f9-4bed-9a0e-29ff8e5394f2\"\n        },\n        {\n            \"field\": \"type_id\",\n            \"operator\": \"=\",\n            \"reference\": \"3aab5561-58d7-4149-9fbc-3f090d59bb21\"\n        },\n        {\n            \"field\": \"status_id\",\n            \"operator\": \"=\",\n            \"reference\": \"acf74167-ec87-474f-a3b3-7f98c1b4098a\"\n        }\n    ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api_endpoint}}/expense/count",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"expense",
-								"count"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "search expenses",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"segment\": {\n        \"page\": 1,\n        \"item\": 20\n    },\n    \"criteria\": []\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api_endpoint}}/expense/search",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"expense",
-								"search"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create expense",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Arka Expense Test 1\",\n    \"details\": null,\n    \"type_id\": \"ce249a0a-4872-4c44-89bd-c5c5994b670c\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api_endpoint}}/expense",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"expense"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update status",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"f28c1a94-06ed-404d-a6e7-e38d86af939e\",\n    \"status_id\": \"ad41b3fe-3f44-44d8-9d3e-145b89544c0b\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api_endpoint}}/expense/status",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"expense",
-								"status"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "fetch analytics",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"criteria\": [\n        {\n            \"field\": \"team_id\",\n            \"operator\": \"=\",\n            \"reference\": \"da18214c-48d1-49df-a294-aca1cc296144\"\n        },\n        {\n            \"field\": \"approved_at\",\n            \"operator\": \">=\",\n            \"reference\": \"2025-01-01T00:00:00.000Z\"\n        },\n        {\n            \"field\": \"approved_at\",\n            \"operator\": \"<=\",\n            \"reference\": \"2025-03-31T00:00:00.000Z\"\n        }\n    ],\n    \"granularity\": \"monthly\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api_endpoint}}/expense/analytics",
-							"host": [
-								"{{api_endpoint}}"
-							],
-							"path": [
-								"expense",
-								"analytics"
-							]
-						}
-					},
-					"response": []
+				"url": {
+					"raw": "{{url}}/access/sign-out",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"access",
+						"sign-out"
+					]
 				}
-			]
+			},
+			"response": []
+		},
+		{
+			"name": "Member Create API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"name\": \"Mitali Bera\",\n        \"email\": \"mitali@arkahalder.com\",\n        \"password\": \"madhu123\"\n    },\n    {\n        \"name\": \"Aparna Tikadar\",\n        \"email\": \"aparna@arkahalder.com\",\n        \"password\": \"aparna123\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/member",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"member"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Task Create API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"name\": \"Sample Task To Do 1\",\n        \"overdueAt\": null\n    },\n    {\n        \"name\": \"Sample Task To Do 2\",\n        \"overdueAt\": \"2024-02-11T18:29:59.999Z\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/task",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Task Update API",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"id\": \"281031e8-99d4-4e8f-b0a7-ae7c8485dc7d\",\n        \"name\": \"Updated Sample Task To Do 1\",\n        \"overdueAt\": \"2024-02-11T18:29:59.999Z\"\n    },\n    {\n        \"id\": \"f5f121e1-25b9-4f5c-a3de-1bc8c12df797\",\n        \"name\": \"Updated Sample Task To Do 2\",\n        \"overdueAt\": \"2024-02-11T18:29:59.999Z\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/task",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Task Status API",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"id\": \"4ed1234b-0bcd-4845-9777-7d26f8a76d4b\",\n        \"complete\": true\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/task",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Task Delete API",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    \"4ed1234b-0bcd-4845-9777-7d26f8a76d4b\"\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/task",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Task Search API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filter\": [],\n    \"pages\": {\n        \"offset\": 0,\n        \"limit\": 50\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/task/search",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Task Count API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filter\": [\n        {\n            \"attribute\": \"complete\",\n            \"operation\": \"EQUAL_TO\",\n            \"reference\": true\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/task/count",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task",
+						"count"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

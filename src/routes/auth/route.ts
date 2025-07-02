@@ -15,7 +15,7 @@ authRouter.post('/login', async (req, res) => {
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    res.status(200).send({ user, type });
+    res.sendStatus(200);
   }
   catch (error) {
     console.error(error);
