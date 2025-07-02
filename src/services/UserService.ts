@@ -1,6 +1,6 @@
 // Models
 import { Team } from "../models/Team";
-import { User } from "../models/User";
+import { User, UserWithRelations } from "../models/User";
 import { UserType } from "../models/UserType";
 
 // Enums
@@ -39,7 +39,7 @@ const fetchRequestors: (user: SessionType) => Promise<User[]> = async (user) => 
 };
 
 // Linked with Route
-const fetchTeams: (user: SessionType) => Promise<Team[]> = async (user) => {
+const fetchTeams: (user: SessionType) => Promise<{ id: string; name: string; }[]> = async (user) => {
   if (user.type === USER_TYPE.ADMINISTRATOR) {
     return await Team
       .query()
@@ -60,7 +60,7 @@ const fetchTeams: (user: SessionType) => Promise<Team[]> = async (user) => {
       builder
         .select('id', 'name')
         .orderBy('name');
-    });
+    }) as unknown as UserWithRelations[];
   return teams;
 };
 
