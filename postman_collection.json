@@ -328,12 +328,7 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Analytics",
-			"item": [
+				},
 				{
 					"name": "fetch analytics",
 					"request": {
@@ -341,7 +336,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"groupBy\": \"type_id\",\n    \"criteria\": []\n}",
+							"raw": "{\n    \"criteria\": [\n        {\n            \"field\": \"team_id\",\n            \"operator\": \"=\",\n            \"reference\": \"da18214c-48d1-49df-a294-aca1cc296144\"\n        },\n        {\n            \"field\": \"approved_at\",\n            \"operator\": \">=\",\n            \"reference\": \"2025-01-01T00:00:00.000Z\"\n        },\n        {\n            \"field\": \"approved_at\",\n            \"operator\": \"<=\",\n            \"reference\": \"2025-03-31T00:00:00.000Z\"\n        }\n    ],\n    \"granularity\": \"monthly\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -349,11 +344,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{api_endpoint}}/analytics",
+							"raw": "{{api_endpoint}}/expense/analytics",
 							"host": [
 								"{{api_endpoint}}"
 							],
 							"path": [
+								"expense",
 								"analytics"
 							]
 						}
