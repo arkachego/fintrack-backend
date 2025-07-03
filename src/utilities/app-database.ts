@@ -28,11 +28,11 @@ const appendCriteria = (
   criteria: CriteriaType[]
 ): void => {
   if (user.type === USER_TYPE.EMPLOYEE) {
-    query['andWhere'](knex.raw(`?? = ?`, ['requestor_id', user.id]));
+    query['where'](knex.raw(`?? = ?`, ['requestor_id', user.id]));
   }
   if (!criteria || criteria.length === 0) return;
   for (let i = 0; i < criteria.length; i++) {
-    const clause = i === 0 ? 'where' : 'andWhere';
+    const clause = user.type === USER_TYPE.EMPLOYEE ? 'andWhere' : 'where';
     const { field, operator, reference } = criteria[i];
     if (operator === Operator.IN || operator === Operator.NOT_IN) {
       const arrayOperator = operator === Operator.NOT_IN ? 'NOT IN' : 'IN';
