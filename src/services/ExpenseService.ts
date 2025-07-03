@@ -21,16 +21,16 @@ import { CriteriaType, QueryType, SegmentType } from "../types/QueryType";
 import { appendCriteria } from "../utilities/app-database";
 
 // Linked with Route
-const countExpenses: (query: QueryType) => Promise<Expense[]> = async ({ criteria }) => {
+const countExpenses: (user: SessionType, query: QueryType) => Promise<Expense[]> = async (user, { criteria }) => {
   const query = Expense
     .query()
     .count('*');
-  appendCriteria(query, criteria);
+  appendCriteria(user, query, criteria);
   return await query;
 };
 
 // Linked with Route
-const searchExpenses: (query: QueryType) => Promise<Expense[]> = async ({ segment, criteria }) => {
+const searchExpenses: (user: SessionType, query: QueryType) => Promise<Expense[]> = async (user, { segment, criteria }) => {
   const query = Expense
     .query()
     .select(
@@ -44,7 +44,7 @@ const searchExpenses: (query: QueryType) => Promise<Expense[]> = async ({ segmen
       'approved_at',
       'rejected_at',
     );
-  appendCriteria(query, criteria);
+  appendCriteria(user, query, criteria);
   const querySegment: SegmentType = segment || {
     page: 1,
     item: 20,
@@ -79,7 +79,7 @@ const createExpense: (user: SessionType, payload: ExpensePayloadType) => Promise
       requestor_id: user.id,
       requested_at: DayJS().toISOString(),
     } as any, { allowRefs: true });
-  const expense = await searchExpenses({
+  const expense = await searchExpenses(user, {
     segment: {
       page: 1,
       item: 1,
@@ -110,6 +110,7 @@ const changeStatus: (user: SessionType, payload: StatusType) => Promise<Expense>
   await Expense.query()
     .updateAndFetchById(id, delta);
   const expense = await searchExpenses({
+    user,
     segment: {
       page: 1,
       item: 1,
@@ -151,7 +152,7 @@ const getAnalyticsData: (user: SessionType, query: QueryType) => Promise<any[]> 
       reference: approvedStatus.id,
     },
   ];
-  appendCriteria(subquery, modifiedCriteria);
+  appendCriteria(user, subquery, modifiedCriteria);
   const result = await Expense
     .query()
     .from(subquery)
