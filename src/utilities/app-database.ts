@@ -27,6 +27,9 @@ const appendCriteria = (
   query: Knex.QueryBuilder,
   criteria: CriteriaType[]
 ): void => {
+  if (user.type === USER_TYPE.EMPLOYEE) {
+    query['andWhere'](knex.raw(`?? = ?`, ['requestor_id', user.id]));
+  }
   if (!criteria || criteria.length === 0) return;
   for (let i = 0; i < criteria.length; i++) {
     const clause = i === 0 ? 'where' : 'andWhere';
@@ -37,9 +40,6 @@ const appendCriteria = (
     } else {
       query[clause](knex.raw(`?? ${operator} ?`, [field, reference]));
     }
-  }
-  if (user.type === USER_TYPE.EMPLOYEE) {
-    query['andWhere'](knex.raw(`?? = ?`, ['requestor_id', user.id]));
   }
 };
 
