@@ -10,11 +10,6 @@ const validatorRouter = Router();
 validatorRouter.use(async (req, res, next) => {
   try {
     let token = req.cookies?.['x-auth-token'] || null;
-    console.log(req.headers);
-    if (!token && req.headers?.['authorization']) {
-      const authHeader = req.headers?.['authorization'] as string;
-      token = authHeader.split(' ')[1];
-    }
     if (!token) {
       throw HttpError(403);
     }

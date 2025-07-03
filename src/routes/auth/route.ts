@@ -8,15 +8,14 @@ const authRouter = Router();
 
 authRouter.post('/login', async (req, res) => {
   try {
-    const result = await AuthService.loginUser(req.body);
-    const { token } = result;
+    const token = await AuthService.loginUser(req.body);
     res.cookie("x-auth-token", token, {
       domain: process.env.AUTHORIZED_DOMAIN,
       httpOnly: true,
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    res.status(200).send(result);
+    res.sendStatus(200);
   }
   catch (error) {
     console.error(error);

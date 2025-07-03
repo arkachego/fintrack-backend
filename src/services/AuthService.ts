@@ -12,19 +12,8 @@ import { SessionType } from "../types/SessionType";
 
 const APP_TOKEN_SECRET = 'app-token-secret';
 
-type ObjectType = {
-  id: string;
-  name: string;
-};
-
-type LoginResponse = {
-  user: ObjectType;
-  type: ObjectType;
-  token: string;
-};
-
 // Linked with Route
-const loginUser: (payload: LoginType) => Promise<LoginResponse> = async (payload) => {
+const loginUser: (payload: LoginType) => Promise<string> = async (payload) => {
   const [ profile ] = await User
     .query()
     .select('id', 'name', 'password')
@@ -37,8 +26,7 @@ const loginUser: (payload: LoginType) => Promise<LoginResponse> = async (payload
   const token = jsonwebtoken.sign({ id: profile.id }, APP_TOKEN_SECRET, {
     expiresIn: '7d',
   });
-  const { type, password, ...user } = profile;
-  return { user, type, token };
+  return token;
 };
 
 // Linked with Middleware
