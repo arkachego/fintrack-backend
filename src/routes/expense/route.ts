@@ -14,6 +14,7 @@ const expenseRouter = Router();
 expenseRouter.post('/count', async (req, res) => {
   try {
     const expenses = await ExpenseService.countExpenses(
+      res.locals.user,
       req.body as QueryType,
     );
     res.status(200).send(expenses[0]);
@@ -29,6 +30,7 @@ expenseRouter.post('/count', async (req, res) => {
 expenseRouter.post('/search', async (req, res) => {
   try {
     const expenses = await ExpenseService.searchExpenses(
+      res.locals.user,
       req.body as QueryType,
     );
     res.status(200).send(expenses);
