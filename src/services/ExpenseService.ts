@@ -109,8 +109,7 @@ const changeStatus: (user: SessionType, payload: StatusType) => Promise<Expense>
   }
   await Expense.query()
     .updateAndFetchById(id, delta);
-  const expense = await searchExpenses({
-    user,
+  const expense = await searchExpenses(user, {
     segment: {
       page: 1,
       item: 1,
