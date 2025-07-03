@@ -10,6 +10,7 @@ import knexConfig from '../migrations/knexfile';
 import { Operator } from '../enums/OperatorEnum';
 
 // Types
+import { SessionType } from '../types/SessionType';
 import { CriteriaType } from '../types/QueryType';
 
 // Initialize Knex
@@ -19,6 +20,7 @@ const knex: KnexType = Knex(knexConfig[process.env.NODE_ENV || 'development']);
 Model.knex(knex);
 
 const appendCriteria = (
+  user: SessionType,
   query: Knex.QueryBuilder,
   criteria: CriteriaType[]
 ): void => {
@@ -32,6 +34,10 @@ const appendCriteria = (
     } else {
       query[clause](knex.raw(`?? ${operator} ?`, [field, reference]));
     }
+  }
+  if (user.type === USER_TYPE.EMPLOYEE) {
+    const clause = i === 0 ? 'andWhere' : 'andWhere';
+    query['andWhere'](knex.raw(`requestor_id = ${user.id}`));
   }
 };
 
