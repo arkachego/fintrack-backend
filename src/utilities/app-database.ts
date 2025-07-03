@@ -39,7 +39,6 @@ const appendCriteria = (
     }
   }
   if (user.type === USER_TYPE.EMPLOYEE) {
-    const clause = i === 0 ? 'andWhere' : 'andWhere';
     query['andWhere'](knex.raw(`requestor_id = ${user.id}`));
   }
 };
