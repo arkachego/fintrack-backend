@@ -4,7 +4,7 @@ import Knex from 'knex';
 import type { Knex as KnexType } from 'knex';
 
 // Constants
-import USER_TYPE from "../constants/user-types";
+import { USER_TYPE } from "../constants/user-types";
 
 // Utilities
 import knexConfig from '../migrations/knexfile';
