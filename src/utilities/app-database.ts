@@ -39,7 +39,7 @@ const appendCriteria = (
     }
   }
   if (user.type === USER_TYPE.EMPLOYEE) {
-    query['andWhere'](knex.raw(`requestor_id = ${user.id}`));
+    query['andWhere'](knex.raw(`?? ${operator} ?`, ['requestor_id', user.id]));
   }
 };
 
